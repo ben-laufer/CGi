@@ -18,3 +18,5 @@ Note: All bed files need to have unix and not mac or windows line breaks.
 ## Data Visualization
 
 Then the enrichment results can be visualized using the [R script](GAT_CpG_hyper_hypo_plot.R).
+
+![Example Results](Example_results.jpg)
