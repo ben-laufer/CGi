@@ -1,20 +1,4 @@
 # GAT_CpG_hyper_hypo.sh
-# Ben Laufer
-
-# Takes output from DMRichR and performs statistical testing for CpG annotation enrichments
-
-# You can install GAT through conda (conda install -c bioconda gat) and download bioconda here (https://bioconda.github.io/user/install.html#install-conda)
-
-# The working directory requires:
-# 1) A bed file of DMRs (DMRs.bed) from DMRichR (Extra > GAT).
-# 2) A bed file of background regions (background.bed) from DMRichR (Extra > GAT).
-# 3) A bed file of CpG annotations (hg38_CpG.bed) from DMRichR (Extra > GAT).
-# 4) A isochore file that allows you to correct for GC content.
-# isochores from: http://bioinfo2.ugr.es:8080/isochores/maps/
-# ioschores lifted over from hg19 to hg38 and edited in R for bed format: chr, start, stop, "iso" and then sorted
-# Ref:https://github.com/AndreasHeger/gat/issues/4:
-
-# If using external bed files, make sure they have unix and not mac or windows line breaks
 
 echo "Sorting bed files"
 
