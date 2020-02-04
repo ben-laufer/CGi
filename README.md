@@ -12,7 +12,7 @@ You can install GAT through [conda](https://bioconda.github.io/user/install.html
 ## Enrichment Testing
 
 The working directory for the [shell script](GAT_CpG_hyper_hypo.sh) requires:
-1) A bed file of DMRs (DMRs.bed) from DMRichR (Extra > GAT).
+1) A bed file of DMRs (DMRs.bed) from DMRichR (Extra > GAT). This file has a fourth column indicating whether the DMR was "hypermethylated" or "hypomethylated". 
 2) A bed file of background regions (background.bed) from DMRichR (Extra > GAT).
 3) A bed file of CpG annotations (hg38_CpG.bed) from DMRichR (Extra > GAT).
 4) A isochore file that allows you to correct for GC content ([hg38](hg38isochores_sorted.bed) is provided in this repository). 
