@@ -2,16 +2,19 @@
 # Perform enrichment testing for CpG and genic annotations within DMRs
 # Ben Laufer
 
+echo "Sorting DMR and background region bed files"
+sort -k1,1 -k2,2n DMRs.bed > DMRs_sorted.bed
+sort -k1,1 -k2,2n background.bed > background_sorted.bed
+echo "Done sorting DMR and background region bed files"
+
 #######
 # CpG #
 #######
 echo "Testing for CpG annotation enrichments"
 
-echo "Sorting bed files"
-sort -k1,1 -k2,2n DMRs.bed > DMRs_sorted.bed
-sort -k1,1 -k2,2n background.bed > background_sorted.bed
+echo "Sorting CpG annotation bed file"
 sort -k1,1 -k2,2n hg38CpG.bed > hg38CpG_sorted.bed
-echo "Done sorting"
+echo "Done sorting CpG annotation bed file"
 
 echo "Running GAT for CpG annotation enrichments"
 call="gat-run.py \
@@ -28,11 +31,7 @@ call="gat-run.py \
 
 echo $call
 eval $call
-echo "Done enriching"
-
-echo "Removing temporary files"
-rm *_sorted.bed
-echo "Done removing temporary files"
+echo "Done enriching for CpG annotations"
 
 echo "CpG testing complete"
 
@@ -41,31 +40,17 @@ echo "CpG testing complete"
 #########
 echo "Testing for genic annotation enrichments"
 
-echo "Sorting bed files"
-sort -k1,1 -k2,2n DMRs.bed > DMRs_sorted.bed
-sort -k1,1 -k2,2n background.bed > background_sorted.bed
-sort -k1,1 -k2,2n enhancers.bed > enhancers_sorted.bed
-sort -k1,1 -k2,2n promoters.bed > promoters_sorted.bed
-sort -k1,1 -k2,2n introns.bed > introns_sorted.bed
-sort -k1,1 -k2,2n boundaries.bed > boundaries_sorted.bed
-sort -k1,1 -k2,2n intergenic.bed > intergenic_sorted.bed
-sort -k1,1 -k2,2n exons.bed > exons_sorted.bed
-sort -k1,1 -k2,2n fiveUTRs.bed > fiveUTRs_sorted.bed
-sort -k1,1 -k2,2n threeUTRs.bed > threeUTRs_sorted.bed
-sort -k1,1 -k2,2n onetofivekb.bed > onetofivekb_sorted.bed
-echo "Done sorting"
-
-echo "Merging bed files"
-bedtools merge -i enhancers_sorted.bed > enhancers_merged.bed
-bedtools merge -i promoters_sorted.bed > promoters_merged.bed
-bedtools merge -i introns_sorted.bed > introns_merged.bed
-bedtools merge -i boundaries_sorted.bed > boundaries_merged.bed
-bedtools merge -i intergenic_sorted.bed > intergenic_merged.bed
-bedtools merge -i exons_sorted.bed > exons_merged.bed
-bedtools merge -i fiveUTRs_sorted.bed > fiveUTRs_merged.bed
-bedtools merge -i threeUTRs_sorted.bed > threeUTRs_merged.bed
-bedtools merge -i onetofivekb_sorted.bed > onetofivekb_merged.bed
-echo "Done merging"
+echo "Sorting, removing invalid records, and merging genic annotation bed files"
+sort -k1,1 -k2,2n enhancers.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > enhancers_merged.bed
+sort -k1,1 -k2,2n promoters.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > promoters_merged.bed
+sort -k1,1 -k2,2n introns.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > introns_merged.bed
+sort -k1,1 -k2,2n boundaries.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > boundaries_merged.bed
+sort -k1,1 -k2,2n intergenic.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > intergenic_merged.bed
+sort -k1,1 -k2,2n exons.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > exons_merged.bed
+sort -k1,1 -k2,2n fiveUTRs.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > fiveUTRs_merged.bed
+sort -k1,1 -k2,2n threeUTRs.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > threeUTRs_merged.bed
+sort -k1,1 -k2,2n onetofivekb.bed | awk -v OFS='\t' '{if ($2 >= 0) print $1,$2,$3}' | bedtools merge -i stdin > onetofivekb_merged.bed
+echo "Done sorting, removing invalid records, and merging bed files"
 
 echo "Running GAT for genic annotation enrichments"
 call="gat-run.py \
@@ -90,14 +75,12 @@ call="gat-run.py \
 
 echo $call
 eval $call
-echo "Done enriching for CpG annotations"
+echo "Done enriching for genic annotations"
 
 echo "Removing temporary files"
 rm *_sorted.bed
 rm *_merged.bed
 echo "Done removing temporary files"
-
-echo "Done enriching for genic annotations"
 
 #########
 # Plots #

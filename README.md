@@ -5,6 +5,9 @@
 
 This set of scripts utilizes the [Genomic Association Tester](https://gat.readthedocs.io/en/latest/) (GAT) to examine for significant enrichments in CpG (CpG Islands, CpG Shores, CpG Shelves, and Open Sea) and Genic (Enhancers, 1-5 kb Upstream, Promoter, 5' UTR, Exon, Exon/Intron Boundaries, Intron, 3' UTR, and Intergenic) annotations from the [annotatr package](https://bioconductor.org/packages/release/bioc/html/annotatr.html). GAT uses a random sampling based approach that considers sequence length and GC content while also controlling the false discovery rate. The results of the enrichment testing are then visualized in a bar chart. 
 
+## Quick Start
+If everything is installed and all the files are in your working directory, the enrichment testing and plotting can be run by the following command: `sh GAT.sh`
+
 ## Installation
 
 You can install GAT and bedtools through [conda](https://bioconda.github.io/user/install.html#install-conda): `conda install -c bioconda gat bedtools`

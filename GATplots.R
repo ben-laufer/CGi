@@ -7,7 +7,7 @@
 # Install -----------------------------------------------------------------
 
 if (!requireNamespace(c("ggplot2", "reshape2"), quietly = TRUE))
-  install.packages(c("ggplot2", "reshape2"))
+  install.packages(c("ggplot2", "reshape2"), repos = "https://cloud.r-project.org")
 library(ggplot2)
 library(reshape2)
 
@@ -28,7 +28,7 @@ gg_color_hue <- function(n) {
 # CpG ---------------------------------------------------------------------
 
 # Load
-GAT <- read.delim("GAT_CpG_hyper_hypo.tsv")
+GAT <- read.delim("Gat_CpG_hyper_hypo_results.tsv")
 
 # Nice names
 GAT$annotation <- as.character(GAT$annotation)
@@ -84,7 +84,7 @@ CpG <- ggplot(data = GAT, aes(annotation, y = value, fill = annotation)) +
   geom_text(data = GAT[(GAT$signif == 1 & GAT$value > 0), ], label = "*", size = 8, show.legend = FALSE, nudge_y = 0.5, nudge_x = -0.05) +
   geom_text(data = GAT[(GAT$signif == 1 & GAT$value < 0), ], label = "*", size = 8, show.legend = FALSE, nudge_y = -0.5, nudge_x = -0.05)
 
-ggsave("GAT_CpG_hyper_hypo.pdf",
+ggsave("Gat_CpG_hyper_hypo.pdf",
        plot = CpG,
        device = NULL,
        width = 11,
@@ -154,7 +154,7 @@ gene <- ggplot(data=GAT2, aes(x=annotation, y =value, fill = annotation)) +
   geom_text(data = GAT2[(GAT2$signif ==1 & GAT2$value >0), ], label = "*", size=8, show.legend = FALSE, nudge_y = 0.5, nudge_x = -0.09) +
   geom_text(data = GAT2[(GAT2$signif ==1 & GAT2$value <0), ], label = "*", size=8, show.legend = FALSE, nudge_y = -0.5, nudge_x = -0.09)
 
-ggsave("GAT_genic_hyper_hypo.pdf",
+ggsave("Gat_genic_hyper_hypo.pdf",
        plot = gene,
        device = NULL,
        width = 11,
