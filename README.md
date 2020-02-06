@@ -16,12 +16,18 @@ You can install GAT and bedtools through [conda](https://bioconda.github.io/user
 
 The working directory for the [shell script](GAT.sh) requires:
 1) A bed file of DMRs (DMRs.bed) from DMRichR (Extra > GAT). This file has a fourth column indicating whether the DMR was "hypermethylated" or "hypomethylated". 
-2) A bed file of the dmrseq background regions (background.bed) from DMRichR (Extra > GAT). Alternatively, you can use the bsseq background regions (bsseq_background.csv) from DMRichR (Extra), where you convert it to bed format by selecting the first three columns and changing the file extension to ".bed". The dmrseq and bsseq regions offer very different perspectives, since the dmrseq background regions are defined as the testable regions that show a difference between groups and the DMRs overlap precisely with these background regions, which is ideal for many types of enrichment testing. The bsseq background regions are more representative of genome-wide coverage; however, their size is highly variable and they do not overlap precisely with the DMRs. Therefore, each approach has its own strengths and weaknesses. 
-3) A bed file of CpG (hg38_CpG.bed) from DMRichR (Extra > GAT).
+2) A bed file of the background regions (background.bed) from DMRichR (Extra > GAT). 
+3) A bed file of CpG annotations (hg38_CpG.bed) from DMRichR (Extra > GAT).
 4) Bed files of genic annotations (enhancers.bed, promoters.bed, introns.bed, boundaries.bed, intergenic.bed, exons.bed, fiveUTRs.bed, threeUTRs.bed, and onetofivekb.bed) from DMRichR (Extra > GAT).
 5) A isochore file that allows you to correct for GC content ([hg38](hg38isochores.bed) is provided in this repository). 
 
-Note: These scripts can be modified to work with other genomes. The lines in the scripts that refer to hg38 will need to be modified accordingly. The isochore files can be [downloaded](http://bioinfo2.ugr.es:8080/isochores/maps/) (some will need to be [lifted over](https://genome.ucsc.edu/cgi-bin/hgLiftOver)) and then edited for a [special bed format](https://github.com/AndreasHeger/gat/issues/4) (chr, start, stop, iso). All bed files need to have unix and not mac or windows line breaks.
+### Background Regions
+
+The background regions provided (in Extra > GAT) are from dmrseq. Alternatively, you can use the bsseq background regions (bsseq_background.csv) from DMRichR (in the Extra folder), where you convert it to bed format by selecting the first three columns and changing the file extension to ".bed" while also making sure to save it with unix line breaks (not windows or mac). The dmrseq and bsseq regions offer very different perspectives, since the dmrseq background regions are defined as the testable regions that show a difference between groups and the DMRs overlap precisely with these background regions, which is ideal for many types of enrichment testing. The bsseq background regions are more representative of genome-wide CpG coverage; however, their size is highly variable and they do not overlap precisely with the DMRs. Therefore, each approach has its own strengths and weaknesses. 
+
+### Other Genomes
+
+These scripts can be modified to work with other genomes, since DMRichR will provide genome specific files if available. However, the lines in the scripts of this repository that refer to hg38 will need to be modified accordingly. The genome specific isochore files can be [downloaded](http://bioinfo2.ugr.es:8080/isochores/maps/) (some will need to be [lifted over](https://genome.ucsc.edu/cgi-bin/hgLiftOver)) and then edited for a [special bed format](https://github.com/AndreasHeger/gat/issues/4) (chr, start, stop, iso). All bed files need to have unix and not mac or windows line breaks.
 
 ## Data Visualization
 
