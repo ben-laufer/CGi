@@ -1,6 +1,18 @@
 # CGi
 #### Takes output from [DMRichR](https://github.com/ben-laufer/DMRichR) and performs statistical testing and visualization for CpG and genic annotation enrichments.
 
+### Table of Contents
+
+0. [Overview](https://github.com/ben-laufer/CGi#overview)
+1. [Quick Start](https://github.com/ben-laufer/CGi#quick-start)
+2. [Installation](https://github.com/ben-laufer/CGi#installation)
+3. [Enrichment Testing](https://github.com/ben-laufer/CGi#enrichment-testing)
+   1. [Background Regions](https://github.com/ben-laufer/CGi#background-regions)
+   2. [Other Genomes](https://github.com/ben-laufer/CGi#other-genomes)
+4. [Data Visualization](https://github.com/ben-laufer/CGi#data-visualization)
+   1. [CpG Annotations](https://github.com/ben-laufer/CGi#cpg-annotations)
+   2. [Genic Annotations](https://github.com/ben-laufer/CGi#genic-annotations)
+
 ## Overview
 
 This set of scripts utilizes the [Genomic Association Tester](https://gat.readthedocs.io/en/latest/) (GAT) to examine for significant enrichments in CpG (CpG Islands, CpG Shores, CpG Shelves, and Open Sea) and Genic (Enhancers, 1-5 kb Upstream, Promoter, 5' UTR, Exon, Exon/Intron Boundaries, Intron, 3' UTR, and Intergenic) annotations from the [annotatr package](https://bioconductor.org/packages/release/bioc/html/annotatr.html). GAT uses a random sampling based approach that considers sequence length and GC content while also controlling the false discovery rate. The results of the enrichment testing are then visualized in a bar chart. 
