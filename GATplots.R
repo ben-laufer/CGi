@@ -20,7 +20,7 @@ options(readr.num_columns = 0)
 #' @references \url{https://stackoverflow.com/questions/8197559/emulate-ggplot2-default-color-palette}
 #' @importFrom glue glue
 #' @export gg_color_hue
-gg_color_hue <- function(n) {
+gg_color_hue <- function(n){
   hues = seq(15, 375, length = n + 1)
   hcl(h = hues, l = 65, c = 100)[1:n]
 }
@@ -32,15 +32,9 @@ GAT <- readr::read_tsv("Gat_CpG_hyper_hypo_results.tsv") %>%
   dplyr::mutate(annotation = dplyr::recode_factor(annotation,
                                                   "hg38_cpg_inter" = "Open Sea",
                                                   "hg38_cpg_shelves" = "CpG Shelf",
-                                                  "hg38_cpg_islands" = "CpG Island",
-                                                  "hg38_cpg_shores" = "CpG Shore")
+                                                  "hg38_cpg_shores" = "CpG Shore",
+                                                  "hg38_cpg_islands" = "CpG Island")
   ) %>%
-  dplyr::mutate(annotation = forcats::fct_relevel(annotation,
-                                                  "Open Sea",
-                                                  "CpG Shelf",
-                                                  "CpG Shore",
-                                                  "CpG Island")
-  ) %>% 
   dplyr::mutate(fold = dplyr::case_when(fold < 1 ~ -1/fold,
                                         fold >= 1 ~ fold)
   ) %>%
@@ -51,15 +45,6 @@ GAT <- readr::read_tsv("Gat_CpG_hyper_hypo_results.tsv") %>%
                 track,
                 fold,
                 signif)
-cat("Done.")
-
-cat("\n", "Choosing colors...")
-cols = nlevels(GAT$annotation) %>%
-  gg_color_hue() %>%
-  rev()
-
-names(cols) <- levels(GAT$annotation)
-order <- rev(levels(GAT$annotation))
 cat("Done.")
 
 cat("\n", "Plotting...")
@@ -82,8 +67,13 @@ cat("\n", "Plotting...")
     scale_y_continuous(limits = c(-4,4),
                        breaks = c(-4,-3,-2,-1,0,1,2,3,4)
     ) +
-    scale_fill_manual(values = cols,
-                      breaks = order,
+    scale_fill_manual(values = GAT$annotation %>%
+                        nlevels() %>% 
+                        gg_color_hue() %>%
+                        rev(),
+                      breaks = GAT$annotation %>%
+                        levels() %>%
+                        rev(),
                       name = "Annotation") +
     facet_grid(~track) +
     geom_hline(yintercept = 0) +
@@ -111,27 +101,16 @@ cat("Done.")
 cat("\n","\n", "Tidying genic annotations...")
 GAT2 <- readr::read_tsv("Gat_genic_hyper_hypo_results.tsv") %>% 
   dplyr::mutate(annotation = dplyr::recode_factor(annotation,
-                                                  "enhancers_merged.bed" = "Enhancers",
                                                   "intergenic_merged.bed" = "Intergenic",
-                                                  "introns_merged.bed" = "Intron",
-                                                  "onetofivekb_merged.bed" = "1-5 kb Upstream",
-                                                  "boundaries_merged.bed" = "Exon/Intron Boundaries",
                                                   "threeUTRs_merged.bed" = "3' UTR",
+                                                  "introns_merged.bed" = "Intron",
+                                                  "boundaries_merged.bed" = "Exon/Intron Boundaries",
                                                   "exons_merged.bed" = "Exon",
                                                   "fiveUTRs_merged.bed" = "5' UTR",
-                                                  "promoters_merged.bed" = "Promoter")
+                                                  "promoters_merged.bed" = "Promoter",
+                                                  "onetofivekb_merged.bed" = "1-5 kb Upstream",
+                                                  "enhancers_merged.bed" = "Enhancers")
   ) %>%
-  dplyr::mutate(annotation = forcats::fct_relevel(annotation,
-                                                  "Intergenic",
-                                                  "3' UTR",
-                                                  "Intron",
-                                                  "Exon/Intron Boundaries",
-                                                  "Exon",
-                                                  "5' UTR",
-                                                  "Promoter",
-                                                  "1-5 kb Upstream",
-                                                  "Enhancers")
-  ) %>% 
   dplyr::mutate(fold = dplyr::case_when(fold < 1 ~ -1/fold,
                                         fold >= 1 ~ fold)
   ) %>%
@@ -142,15 +121,6 @@ GAT2 <- readr::read_tsv("Gat_genic_hyper_hypo_results.tsv") %>%
                 track,
                 fold,
                 signif)
-cat("Done.")
-
-cat("\n", "Choosing colors...")
-cols = nlevels(GAT2$annotation) %>%
-  gg_color_hue() %>%
-  rev()
-
-names(cols) <- levels(GAT2$annotation)
-order <- rev(levels(GAT2$annotation))
 cat("Done.")
 
 cat("\n", "Plotting...")
@@ -174,18 +144,23 @@ cat("\n", "Plotting...")
     scale_y_continuous(limits = c(-3.5,3.5),
                        breaks = c(-3,-2,-1,0,1,2,3)
     ) + 
-    scale_fill_manual(values = cols,
-                      breaks = order,
+    scale_fill_manual(values =  GAT2$annotation %>%
+                        nlevels() %>% 
+                        gg_color_hue() %>%
+                        rev(),
+                      breaks = GAT2$annotation %>%
+                        levels() %>%
+                        rev(),
                       name = "Annotation") +
     facet_grid(~track) +
     geom_hline(yintercept = 0) +
-    geom_text(data = GAT2[(GAT2$signif ==1 & GAT2$fold >0), ],
+    geom_text(data = GAT2[(GAT2$signif == 1 & GAT2$fold > 0), ],
               label = "*",
               size = 8,
               show.legend = FALSE,
               nudge_y = 0.5,
               nudge_x = -0.09) +
-    geom_text(data = GAT2[(GAT2$signif ==1 & GAT2$fold <0), ],
+    geom_text(data = GAT2[(GAT2$signif == 1 & GAT2$fold < 0), ],
               label = "*",
               size = 8,
               show.legend = FALSE,
