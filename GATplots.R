@@ -6,24 +6,10 @@
 
 # Packages ----------------------------------------------------------------
 
-if (!requireNamespace(c("tidyverse"), quietly = TRUE))
+if (!requireNamespace(c("tidyverse", "wesanderson"), quietly = TRUE))
   install.packages("tidyverse", repos = "https://cloud.r-project.org")
-suppressPackageStartupMessages(library(tidyverse))
+stopifnot(suppressMessages(sapply(packages, require, character.only = TRUE)))
 options(readr.num_columns = 0)
-
-# Functions ---------------------------------------------------------------
-
-#' gg_color_hue
-#' @description Generate ggplot2 style colors
-#' @param n Number of samples
-#' @return Character string of colors
-#' @references \url{https://stackoverflow.com/questions/8197559/emulate-ggplot2-default-color-palette}
-#' @importFrom glue glue
-#' @export gg_color_hue
-gg_color_hue <- function(n){
-  hues = seq(15, 375, length = n + 1)
-  hcl(h = hues, l = 65, c = 100)[1:n]
-}
 
 # CpG ---------------------------------------------------------------------
 
@@ -67,10 +53,7 @@ cat("\n", "Plotting...")
     scale_y_continuous(limits = c(-4,4),
                        breaks = c(-4,-3,-2,-1,0,1,2,3,4)
     ) +
-    scale_fill_manual(values = GAT$annotation %>%
-                        nlevels() %>% 
-                        gg_color_hue() %>%
-                        rev(),
+    scale_fill_manual(values = c("forestgreen", "goldenrod2", "dodgerblue", "blue3"),
                       breaks = GAT$annotation %>%
                         levels() %>%
                         rev(),
@@ -146,7 +129,7 @@ cat("\n", "Plotting...")
     ) + 
     scale_fill_manual(values =  GAT2$annotation %>%
                         nlevels() %>% 
-                        gg_color_hue() %>%
+                        wesanderson::wes_palette("Zissou1", n = ., type = "continuous") %>%
                         rev(),
                       breaks = GAT2$annotation %>%
                         levels() %>%
